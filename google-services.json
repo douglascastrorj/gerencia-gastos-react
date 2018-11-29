@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "408478122571",
+    "firebase_url": "https://app-economia.firebaseio.com",
+    "project_id": "app-economia",
+    "storage_bucket": "app-economia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408478122571:android:e6c439340fd9c962",
+        "android_client_info": {
+          "package_name": "com.prototipo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "408478122571-ufk283nnn63d27djv5s5nb9f473288er.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.prototipo",
+            "certificate_hash": "573bfa78a1aa2d0b3d8fd6bdcda305508e8a2dab"
+          }
+        },
+        {
+          "client_id": "408478122571-b5lr3isnbms6n48q6bnsnbkigqrupmnj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhlm4cQQv3kj_m2FDYKkrXSzgNyj_NOLE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "408478122571-gfd5m0ahig9k04tb7qu1m2b9nr0mmkvg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
