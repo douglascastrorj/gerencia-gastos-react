@@ -33,7 +33,6 @@ export default class LoginComponent extends Component {
         getTokens((values) => {
             if (values[0][1] === null) {
                 this.setState({ loading: false })
-                alert('token null')
             } else {
                 autoSignIn(values[1][1]).then((userData) => {
 
