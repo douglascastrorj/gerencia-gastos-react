@@ -8,7 +8,7 @@
 
 
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, ActivityIndicator } from 'react-native';
 
 import { getGastos } from '../../utils/firebase';
 import { getTokens } from '../../utils/localStorage';
@@ -68,7 +68,7 @@ export default class HelloComponent extends Component {
 
     renderLines() {
 
-        const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
+        const data = [1500, 1300, 700, 1033, 800, 1000]
 
         const contentInset = { top: 20, bottom: 20 }
         return (
@@ -81,7 +81,7 @@ export default class HelloComponent extends Component {
                         fontSize: 10,
                     }}
                     numberOfTicks={10}
-                    formatLabel={value => `${value}ºC`}
+                    formatLabel={value => `R$ ${value}`}
                 />
                 <LineChart
                     style={{ flex: 1, marginLeft: 16 }}
@@ -100,10 +100,10 @@ export default class HelloComponent extends Component {
 
         const fill = 'rgb(134, 65, 244)'
         const data = [50, 10, 40, 95, 123, 40]
-        const labels = [ 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro','Dezembro']
+        const labels = ['Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
         return (
 
-            <View style={{ padding: 10 }}>
+            <View style={{flex:1, width: '100%', padding: 10 }}>
                 <BarChart
                     style={{ height: 200 }}
                     data={data}
@@ -129,31 +129,53 @@ export default class HelloComponent extends Component {
 
         if (this.state.loading) {
             return (
-                <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <ActivityIndicator
-                    size={50}
-                />
+                        size={50}
+                    />
                 </View>
             )
         }
         else
-        return (
+            return (
 
-            <ScrollView style={styles.container}>
+                <ScrollView style={styles.container}>
 
-                {/* {this.renderPieChart()} */}
-                <PieChartComponent
-                    data={this.state.pieChart.values}
-                    labels={this.state.pieChart.labels}
-                />
+                    {/* {this.renderPieChart()} */}
 
-                {this.renderBars()}
+                    <View style={styles.content}>
+                        <Text style={styles.chartTitle}>
+                            Gasto Geral por categoria
+                        </Text>
+                        <PieChartComponent
+                            data={this.state.pieChart.values}
+                            labels={this.state.pieChart.labels}
+                        />
+                    </View>
 
-                {this.renderLines()}
 
-            </ScrollView>
 
-        )
+                    <View style={styles.content} >
+                        <Text style={styles.chartTitle}>
+                            Gasto dos Últimos Meses
+                        </Text>
+                        {this.renderBars()}
+                    </View>
+
+                    <View style={styles.content}>
+                        <Text style={styles.chartTitle}>
+                            Gasto Médio do Período
+                        </Text>
+                        {this.renderLines()}
+                    </View>
+
+
+
+                    
+
+                </ScrollView>
+
+            )
     }
 }
 
@@ -161,6 +183,17 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#F5FCFF',
         padding: 10
-
     },
+    content: {
+        flex: 1,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10
+    },
+    chartTitle: {
+        fontFamily: 'Roboto-Bold',
+        fontSize: 18,
+        marginBottom: 15,
+    }
 });
