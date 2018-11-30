@@ -107,6 +107,10 @@ export function autoSignIn(refToken) {
 
 
 export function addGasto(gasto) {
+
+    const date = new Date();
+    gasto = {...gasto, date};
+
     const request = axios({
         method: "POST",
         url: `${firebaseConfig.databaseURL}/gastos.json`,
