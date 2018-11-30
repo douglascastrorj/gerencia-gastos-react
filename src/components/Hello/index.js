@@ -6,32 +6,38 @@
  * @flow
  */
 
-import { AreaChart, Grid, PieChart, YAxis, XAxis, LineChart, BarChart } from 'react-native-svg-charts'
-import * as shape from 'd3-shape'
-
 
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
 
 import { getGastos } from '../../utils/firebase';
 import { getTokens } from '../../utils/localStorage';
+
+import { AreaChart, Grid, PieChart, YAxis, XAxis, LineChart, BarChart } from 'react-native-svg-charts'
+import * as shape from 'd3-shape'
+
+import PieChartComponent from '../Graficos/Piechart';
+import { extrairDadosELabels } from '../../utils/misc'
 
 export default class HelloComponent extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            message: ''
+            gastos: [],
+            pieChart: {},
+            loading: true
         }
     }
 
     componentDidMount() {
-        this.setState({
-            message: `Hello amigo`
-        })
 
         getTokens((tokens) => {
-            getGastos(tokens[3][1]);
+            getGastos(tokens[3][1])
+                .then(gastos => {
+                    let pieChart = extrairDadosELabels(gastos)
+                    this.setState({ gastos, pieChart, loading: false })
+                })
         })
     }
 
@@ -65,7 +71,6 @@ export default class HelloComponent extends Component {
         const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
 
         const contentInset = { top: 20, bottom: 20 }
-
         return (
             <View style={{ height: 200, flexDirection: 'row' }}>
                 <YAxis
@@ -95,9 +100,10 @@ export default class HelloComponent extends Component {
 
         const fill = 'rgb(134, 65, 244)'
         const data = [50, 10, 40, 95, 123, 40]
+        const labels = [ 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro','Dezembro']
         return (
 
-            <View style={{borderColor: '#333', borderWidth: 1, padding: 10}}>
+            <View style={{ padding: 10 }}>
                 <BarChart
                     style={{ height: 200 }}
                     data={data}
@@ -108,9 +114,9 @@ export default class HelloComponent extends Component {
                 </BarChart>
                 <XAxis
                     style={{ marginHorizontal: -10, marginVertical: 10 }}
-                    data={ data }
-                    formatLabel={ (value, index) => index }
-                    contentInset={{ top: 10, bottom:10,  left: 40, right: 40}}
+                    data={data}
+                    formatLabel={(value, index) => labels[index]}
+                    contentInset={{ top: 10, bottom: 10, left: 40, right: 40 }}
                     // spacingInner={0.05}
                     svg={{ fontSize: 10, fill: 'black' }}
                 />
@@ -121,26 +127,30 @@ export default class HelloComponent extends Component {
 
     render() {
 
-        const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
-
+        if (this.state.loading) {
+            return (
+                <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                    <ActivityIndicator
+                    size={50}
+                />
+                </View>
+            )
+        }
+        else
         return (
 
-            <ScrollView>
-                <AreaChart
-                    style={{ height: 200 }}
-                    data={data}
-                    contentInset={{ top: 30, bottom: 30 }}
-                    curve={shape.curveNatural}
-                    svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-                >
-                    <Grid />
-                </AreaChart>
+            <ScrollView style={styles.container}>
 
-                {this.renderPieChart()}
+                {/* {this.renderPieChart()} */}
+                <PieChartComponent
+                    data={this.state.pieChart.values}
+                    labels={this.state.pieChart.labels}
+                />
+
+                {this.renderBars()}
 
                 {this.renderLines()}
 
-                {this.renderBars()}
             </ScrollView>
 
         )
@@ -149,11 +159,8 @@ export default class HelloComponent extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#333',
+        backgroundColor: '#F5FCFF',
         padding: 10
 
     },
-    helloMessage: {
-        color: '#fff'
-    }
 });
