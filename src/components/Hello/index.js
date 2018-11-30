@@ -17,6 +17,9 @@ import { AreaChart, Grid, PieChart, YAxis, XAxis, LineChart, BarChart } from 're
 import * as shape from 'd3-shape'
 
 import PieChartComponent from '../Graficos/Piechart';
+import BarChartComponent from '../Graficos/Barchart';
+import LineChartComponent from '../Graficos/Linechart';
+
 import { extrairDadosELabels } from '../../utils/misc'
 
 export default class HelloComponent extends Component {
@@ -41,89 +44,7 @@ export default class HelloComponent extends Component {
         })
     }
 
-    renderPieChart() {
 
-        const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
-
-        const randomColor = () => ('#' + (Math.random() * 0xFFFFFF << 0).toString(16) + '000000').slice(0, 7)
-
-        const pieData = data
-            .filter(value => value > 0)
-            .map((value, index) => ({
-                value,
-                svg: {
-                    fill: randomColor(),
-                    onPress: () => console.log('press', index),
-                },
-                key: `pie-${index}`,
-            }))
-
-        return (
-            <PieChart
-                style={{ height: 200 }}
-                data={pieData}
-            />
-        )
-    }
-
-    renderLines() {
-
-        const data = [1500, 1300, 700, 1033, 800, 1000]
-
-        const contentInset = { top: 20, bottom: 20 }
-        return (
-            <View style={{ height: 200, flexDirection: 'row' }}>
-                <YAxis
-                    data={data}
-                    contentInset={contentInset}
-                    svg={{
-                        fill: 'grey',
-                        fontSize: 10,
-                    }}
-                    numberOfTicks={10}
-                    formatLabel={value => `R$ ${value}`}
-                />
-                <LineChart
-                    style={{ flex: 1, marginLeft: 16 }}
-                    data={data}
-                    svg={{ stroke: 'rgb(134, 65, 244)' }}
-                    contentInset={contentInset}
-                >
-                    <Grid />
-                </LineChart>
-            </View>
-        )
-    }
-
-
-    renderBars() {
-
-        const fill = 'rgb(134, 65, 244)'
-        const data = [50, 10, 40, 95, 123, 40]
-        const labels = ['Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-        return (
-
-            <View style={{flex:1, width: '100%', padding: 10 }}>
-                <BarChart
-                    style={{ height: 200 }}
-                    data={data}
-                    svg={{ fill }}
-                    contentInset={{ top: 10, bottom: 10 }}
-                >
-                    <Grid />
-                </BarChart>
-                <XAxis
-                    style={{ marginHorizontal: -10, marginVertical: 10 }}
-                    data={data}
-                    formatLabel={(value, index) => labels[index]}
-                    contentInset={{ top: 10, bottom: 10, left: 40, right: 40 }}
-                    // spacingInner={0.05}
-                    svg={{ fontSize: 10, fill: 'black' }}
-                />
-            </View>
-
-        )
-    }
 
     render() {
 
@@ -133,6 +54,7 @@ export default class HelloComponent extends Component {
                     <ActivityIndicator
                         size={50}
                     />
+                    <Text> Carregando...</Text>
                 </View>
             )
         }
@@ -140,8 +62,6 @@ export default class HelloComponent extends Component {
             return (
 
                 <ScrollView style={styles.container}>
-
-                    {/* {this.renderPieChart()} */}
 
                     <View style={styles.content}>
                         <Text style={styles.chartTitle}>
@@ -159,19 +79,16 @@ export default class HelloComponent extends Component {
                         <Text style={styles.chartTitle}>
                             Gasto dos Últimos Meses
                         </Text>
-                        {this.renderBars()}
+                        <BarChartComponent />
                     </View>
 
                     <View style={styles.content}>
                         <Text style={styles.chartTitle}>
                             Gasto Médio do Período
                         </Text>
-                        {this.renderLines()}
-                    </View>
-
-
-
-                    
+                        {/* {this.renderLines()} */}
+                        <LineChartComponent />
+                    </View>      
 
                 </ScrollView>
 

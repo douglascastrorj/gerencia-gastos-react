@@ -36,3 +36,32 @@ export function extrairDadosELabels(gastos) {
 
     return result;
 }
+
+export const Meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+export function agruparGastosPorMes(gastos) {
+    const gastosAgrupadosPorMes = gastos.reduce( (accumulator, gasto) => {
+
+        if(gasto.date) {
+
+            const gastoDate = new Date(gasto.date);
+            if(gastoDate.getFullYear() == new Date().getFullYear()){
+
+                let mesIndex = gastoDate.getMonth()
+                let mesLabel = Meses[mesIndex];
+        
+                if(accumulator[mesLabel]){
+                    accumulator[mesLabel] += customParseFloat(gasto.value);
+                }
+                else if( customParseFloat(gasto.value) > 0) {
+                    accumulator[mesLabel] = customParseFloat(gasto.value);
+                }
+            }
+
+        }
+       
+        return accumulator;
+    }, {})
+
+    return gastosAgrupadosPorMes;
+}
