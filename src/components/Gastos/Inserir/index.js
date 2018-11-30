@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { addGasto } from '../../../utils/firebase';
@@ -72,7 +72,7 @@ export default class InserirGastosComponent extends Component {
                 onPress={() => {
                     this.selectCategory(category.title)
                 }}
-                style={{ width: '33%' }}
+                style={{ width: '33%', height: 80 }}
             >
                 <View style={{ padding: 10, }}>
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -89,41 +89,39 @@ export default class InserirGastosComponent extends Component {
     }
 
     submit = () => {
-        let { description, category, value} = this.state;
+        let { description, category, value } = this.state;
 
-        getTokens( tokens => {
-            const uid = tokens[3][1];  
-            addGasto( {uid, description, category, value} )
-            .then(data=> {
-                console.log(data)
-                alert('Dados Enviados')
-                this.setState({
-                    description: '',
-                    category: '',
-                    value: '',
+        getTokens(tokens => {
+            const uid = tokens[3][1];
+            addGasto({ uid, description, category, value })
+                .then(data => {
+                    console.log(data)
+                    alert('Dados Enviados')
+                    this.setState({
+                        description: '',
+                        category: '',
+                        value: '',
+                    })
+
                 })
-               
-            })
-            .catch(err => {
-                console.log(err)
-            })
+                .catch(err => {
+                    console.log(err)
+                })
         })
-        
-        
+
+
     }
 
 
     render() {
         return (
 
-            <View style={styles.container}>
+            <ScrollView>
+                <View style={styles.container}>
 
 
-                <View style={styles.inputWrapper}>
-
-                    <View style={{ flex: 1, }}>
+                    <View style={{height: '20%', marginBottom: 20}}>
                         <Text style={styles.label}> Selecione uma categoria</Text>
-
                         <View style={styles.categoriesContainer}>
                             {this.renderCategories()}
                         </View>
@@ -131,9 +129,6 @@ export default class InserirGastosComponent extends Component {
                     </View>
 
 
-                </View>
-
-                <View style={styles.inputWrapper}>
                     <View>
                         <Text style={[styles.label, { marginTop: 50 }]}> Preencha os campos abaixo</Text>
                         <TextInput
@@ -160,12 +155,11 @@ export default class InserirGastosComponent extends Component {
                             title="Incluir"
                         />
                     </View>
+
+
+
                 </View>
-
-
-
-            </View>
-
+            </ScrollView>
         );
     }
 }
@@ -176,12 +170,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         // alignItems: 'center',
         backgroundColor: '#F5FCFF',
-        padding: 20
-    },
-    inputWrapper: {
-        flex: 1,
-        justifyContent: 'center',
-        // alignItems: 'center'
         padding: 20
     },
     input: {
