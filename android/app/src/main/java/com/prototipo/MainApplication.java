@@ -3,6 +3,7 @@ package com.prototipo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.SvgPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -26,6 +27,7 @@ import com.reactlibrary.googlesignin.RNGoogleSignInPackage;
 //     protected List<ReactPackage> getPackages() {
 //       return Arrays.<ReactPackage>asList(
 //           new MainReactPackage(),
+            // new SvgPackage(),
 //           new VectorIconsPackage()
 //       );
 //     }
@@ -68,7 +70,8 @@ public class MainApplication extends NavigationApplication {
     return Arrays.<ReactPackage>asList(
       // eg. new VectorIconsPackage()
       new VectorIconsPackage(),
-      new RNGoogleSignInPackage()
+      new RNGoogleSignInPackage(),
+      new SvgPackage()
     );
   }
 
