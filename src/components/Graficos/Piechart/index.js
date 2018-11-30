@@ -2,21 +2,12 @@
 
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { AreaChart, Grid, PieChart, YAxis, XAxis, LineChart, BarChart } from 'react-native-svg-charts'
-import * as shape from 'd3-shape'
+import { PieChart } from 'react-native-svg-charts'
 
+import { colors } from '../colors';
 
 // const randomColor = () => ('#' + (Math.random() * 0xFFFFFF << 0).toString(16) + '000000').slice(0, 7)
 
-
-const colors = [
-    'rgba(255, 99, 132, 0.9)',
-    'rgba(54, 162, 235, 0.9)',
-    'rgba(255, 206, 86, 0.9)',
-    'rgba(75, 192, 192, 0.9)',
-    'rgba(153, 102, 255, 0.9)',
-    'rgba(255, 159, 64, 0.9)'
-]
 let lastColorIndex = 0;
 
 const randomColor = () => {

@@ -4,9 +4,11 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Grid, XAxis, BarChart } from 'react-native-svg-charts';
 
+import { purple } from '../colors';
+
 const BarChartComponent = (props) => {
 
-    const fill = 'rgb(134, 65, 244)'
+    const fill = purple;
     const data = [50, 10, 40, 95, 123, 40]
     const labels = ['Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
 
