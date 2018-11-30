@@ -61,7 +61,7 @@ const PieChartComponent = (props) => {
         }))
 
     return (
-        <View style={{ flex: 1, flexDirection: 'row', padding: 10 }}>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={{ width: '70%' }}>
                 <PieChart
                     style={{ height: 200 }}
