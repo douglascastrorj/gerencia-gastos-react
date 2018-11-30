@@ -94,7 +94,7 @@ export default class HelloComponent extends Component {
     renderBars() {
 
         const fill = 'rgb(134, 65, 244)'
-        const data = [50, 10, 40, 95]
+        const data = [50, 10, 40, 95, 123, 40]
         return (
 
             <View style={{borderColor: '#333', borderWidth: 1, padding: 10}}>
@@ -102,15 +102,16 @@ export default class HelloComponent extends Component {
                     style={{ height: 200 }}
                     data={data}
                     svg={{ fill }}
-                    contentInset={{ top: 50, bottom: 50 }}
+                    contentInset={{ top: 10, bottom: 10 }}
                 >
                     <Grid />
                 </BarChart>
                 <XAxis
-                    style={{ marginHorizontal: -10 }}
+                    style={{ marginHorizontal: -10, marginVertical: 10 }}
                     data={ data }
                     formatLabel={ (value, index) => index }
-                    contentInset={{ left: 30, right: 30 }}
+                    contentInset={{ top: 10, bottom:10,  left: 40, right: 40}}
+                    // spacingInner={0.05}
                     svg={{ fontSize: 10, fill: 'black' }}
                 />
             </View>
