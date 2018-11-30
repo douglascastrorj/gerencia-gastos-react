@@ -15,6 +15,5 @@ Utiliza os recursos de autenticação e Realtime databse do Firebase
 #### Tela de Loading
 ![Alt text](sample_images/tela_loading.png?raw=true "Loading")
 
-![Alt text](sample_images/tela_login.PNG?raw=true "Title")
 
 ![Alt text](sample_images/inserir_gasto.PNG?raw=true "Title")
