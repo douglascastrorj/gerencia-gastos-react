@@ -17,7 +17,7 @@ const BarChartComponent = (props) => {
         <View style={{ flex: 1, width: '100%', padding: 10 }}>
             <BarChart
                 style={{ height: 200 }}
-                data={data}
+                data={props.data}
                 svg={{ fill }}
                 contentInset={{ top: 10, bottom: 10 }}
             >
@@ -25,8 +25,8 @@ const BarChartComponent = (props) => {
             </BarChart>
             <XAxis
                 style={{ marginHorizontal: -10, marginVertical: 10 }}
-                data={data}
-                formatLabel={(value, index) => labels[index]}
+                data={props.data}
+                formatLabel={(value, index) => props.labels[index]}
                 contentInset={{ top: 10, bottom: 10, left: 40, right: 40 }}
                 // spacingInner={0.05}
                 svg={{ fontSize: 10, fill: 'black' }}

@@ -13,14 +13,11 @@ import { StyleSheet, View, Text, ScrollView, ActivityIndicator } from 'react-nat
 import { getGastos } from '../../utils/firebase';
 import { getTokens } from '../../utils/localStorage';
 
-import { AreaChart, Grid, PieChart, YAxis, XAxis, LineChart, BarChart } from 'react-native-svg-charts'
-import * as shape from 'd3-shape'
-
 import PieChartComponent from '../Graficos/Piechart';
 import BarChartComponent from '../Graficos/Barchart';
 import LineChartComponent from '../Graficos/Linechart';
 
-import { extrairDadosELabels } from '../../utils/misc'
+import { extrairDadosELabels, agruparGastosPorMes, agruparGastosPorCategoria } from '../../utils/misc';
 
 export default class HelloComponent extends Component {
 
@@ -38,8 +35,11 @@ export default class HelloComponent extends Component {
         getTokens((tokens) => {
             getGastos(tokens[3][1])
                 .then(gastos => {
-                    let pieChart = extrairDadosELabels(gastos)
-                    this.setState({ gastos, pieChart, loading: false })
+                    let pieChart = extrairDadosELabels(gastos, agruparGastosPorCategoria);
+
+                    let barChart = extrairDadosELabels(gastos, agruparGastosPorMes);
+
+                    this.setState({ gastos, pieChart, barChart, loading: false });
                 })
         })
     }
@@ -79,7 +79,10 @@ export default class HelloComponent extends Component {
                         <Text style={styles.chartTitle}>
                             Gasto dos Últimos Meses
                         </Text>
-                        <BarChartComponent />
+                        <BarChartComponent 
+                            data={this.state.barChart.values}
+                            labels={this.state.barChart.labels}
+                        />
                     </View>
 
                     <View style={styles.content}>

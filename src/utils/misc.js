@@ -7,12 +7,14 @@ export function agruparGastosPorCategoria(gastos) {
     
     const gastosAgrupadosPorCategorias = gastos.reduce( (accumulator, current) => {
 
-        if(accumulator[current.category]){
-            accumulator[current.category] += customParseFloat(current.value);
-        }
-        else if( customParseFloat(current.value) > 0) {
-            accumulator[current.category] = customParseFloat(current.value);
-        }
+        if(current.category){
+            if(accumulator[current.category]){
+                accumulator[current.category] += customParseFloat(current.value);
+            }
+            else if( customParseFloat(current.value) > 0) {
+                accumulator[current.category] = customParseFloat(current.value);
+            }
+        }        
 
         return accumulator;
     }, {})
@@ -20,18 +22,18 @@ export function agruparGastosPorCategoria(gastos) {
     return gastosAgrupadosPorCategorias;
 }
 
-export function extrairDadosELabels(gastos) {
+export function extrairDadosELabels(gastos, funcaoDeAgrupamento) {
     
-    const gastosAgrupados = agruparGastosPorCategoria(gastos);
+    const gastosAgrupados = funcaoDeAgrupamento(gastos);
 
     let result = {
         values: [],
         labels: []
     };
 
-    for( category in gastosAgrupados ) {
-        result.values.push(gastosAgrupados[category]);
-        result.labels.push(category);
+    for( key in gastosAgrupados ) {
+        result.values.push(gastosAgrupados[key]);
+        result.labels.push(key);
     }
 
     return result;
@@ -40,12 +42,15 @@ export function extrairDadosELabels(gastos) {
 export const Meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 
 export function agruparGastosPorMes(gastos) {
+
+    console.log(gastos)
     const gastosAgrupadosPorMes = gastos.reduce( (accumulator, gasto) => {
 
         if(gasto.date) {
 
             const gastoDate = new Date(gasto.date);
             if(gastoDate.getFullYear() == new Date().getFullYear()){
+                console.log(gasto)
 
                 let mesIndex = gastoDate.getMonth()
                 let mesLabel = Meses[mesIndex];
@@ -63,5 +68,6 @@ export function agruparGastosPorMes(gastos) {
         return accumulator;
     }, {})
 
+    console.log(gastosAgrupadosPorMes)
     return gastosAgrupadosPorMes;
 }
