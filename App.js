@@ -13,21 +13,16 @@
 
 import { Navigation } from 'react-native-navigation';
 import Login from './src/components/Login';
-import HomeScreen from './src/components/Home';
 import HelloScreen from './src/components/Hello';
 import InserirGastosScreen from './src/components/Gastos/Inserir';
+
+import ListScreen from './src/components/Gastos/List';
+
 
 Navigation.registerComponent(
   "prototipo.LoginScreen",
   () =>
   Login
-);
-
-
-Navigation.registerComponent(
-  "prototipo.HomeScreen",
-  () =>
-  HomeScreen
 );
 
 
@@ -43,6 +38,14 @@ Navigation.registerComponent(
   () =>
   InserirGastosScreen
 );
+
+
+Navigation.registerComponent(
+  "prototipo.ListScreen",
+  () =>
+  ListScreen
+);
+
 
 export default () => {
   Navigation.startSingleScreenApp({
