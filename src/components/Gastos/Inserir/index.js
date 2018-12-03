@@ -130,7 +130,7 @@ export default class InserirGastosComponent extends Component {
 
 
                     <View>
-                        <Text style={[styles.label, { marginTop: 50 }]}> Preencha os campos abaixo</Text>
+                        <Text style={[styles.label, { marginTop: 30 }]}> Preencha os campos abaixo</Text>
                         <TextInput
                             style={styles.input}
                             placeholder="Descricao"
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
         padding: 5,
         borderBottomColor: '#00ADA9',
         borderBottomWidth: 1,
-        marginTop: 20,
+        marginTop: 15,
         marginBottom: 10
     },
 
