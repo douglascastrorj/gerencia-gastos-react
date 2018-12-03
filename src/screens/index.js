@@ -21,12 +21,23 @@ const navLeftButton = (sources) => {
     }
 }
 
+const navRightButton = (icon) => {
+    return {
+        title: 'List',
+        id: 'ListButton',
+        icon: icon,
+        disableIconTint: true,
+        buttonColor: 'white'
+    }
+}
+
 const LoadTabs = () => {
 
     Promise.all([
         Icon.getImageSource('bars', 20, 'white'),
         Icon.getImageSource('dollar', 20, 'white'),
         Icon.getImageSource('pie-chart', 20, 'white'),
+        Icon.getImageSource('list', 20, 'white'),
     ]).then( (sources) => {
         Navigation.startTabBasedApp({
             tabs:[
@@ -37,7 +48,8 @@ const LoadTabs = () => {
                     icon: sources[2],
                     navigatorStyle: navStyle,
                     navigatorButtons:{
-                        leftButtons:[navLeftButton(sources)]
+                        // leftButtons:[navLeftButton(sources)],
+                        rightButtons:[navRightButton(sources[3])]
                     }
                 },
                 // {
@@ -57,7 +69,8 @@ const LoadTabs = () => {
                     icon: sources[1],
                     navigatorStyle: navStyle,
                     navigatorButtons:{
-                        leftButtons:[navLeftButton(sources)]
+                        // leftButtons:[navLeftButton(sources)],
+                        // rightButtons:[navRightButton(sources[3])]
                     }
                 }
             ],

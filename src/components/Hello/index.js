@@ -19,6 +19,9 @@ import LineChartComponent from '../Graficos/Linechart';
 
 import { extrairDadosELabels, agruparGastosPorMes, agruparGastosPorCategoria } from '../../utils/misc';
 
+import { Navigation } from 'react-native-navigation';
+import { navigatorDeepLink } from '../../screens/links';
+
 export default class HelloComponent extends Component {
 
     constructor(props) {
@@ -28,7 +31,13 @@ export default class HelloComponent extends Component {
             pieChart: {},
             loading: true
         }
+
+        this.props.navigator.setOnNavigatorEvent((event) => {
+            navigatorDeepLink(event, this);
+        })
+
     }
+
 
     componentDidMount() {
 
@@ -79,7 +88,7 @@ export default class HelloComponent extends Component {
                         <Text style={styles.chartTitle}>
                             Gasto dos Últimos Meses
                         </Text>
-                        <BarChartComponent 
+                        <BarChartComponent
                             data={this.state.barChart.values}
                             labels={this.state.barChart.labels}
                         />
@@ -91,7 +100,7 @@ export default class HelloComponent extends Component {
                         </Text>
                         {/* {this.renderLines()} */}
                         <LineChartComponent />
-                    </View>      
+                    </View>
 
                 </ScrollView>
 
