@@ -66,3 +66,21 @@ export function agruparGastosPorMes(gastos) {
 
     return gastosAgrupadosPorMes;
 }
+
+
+
+export const formatNumberToString = number => {
+    return number > 9 ? String(number) : "0" + String(number);
+}
+
+export const formatDate = dateString => {
+
+    if(!dateString)
+        return '-';
+
+    const date = new Date(dateString);
+
+    const formatedDate = formatNumberToString(date.getDate()) + "/" + formatNumberToString(date.getMonth()) + "/" + formatNumberToString(date.getFullYear());
+
+    return formatedDate;
+}

@@ -1,16 +1,24 @@
 
-export const navigatorDeepLink = (event, $this) => {
+const navStyle = {
+    navBarTextFontSize: 20,
+    navBarTextColor: '#ffffff',
+    navBarTextFontFamily: 'RobotoCondensed-Bold',
+    navBarTitleTextCentered: true, //android only
+    navBarBackgroundColor: '#00ADA9'
+}
 
+export const navigatorDeepLink = (event, $this) => {
 
     if (event.id === 'ListButton') {
         $this.props.navigator.showModal({
+            title: 'Lista de Gastos',
             screen: 'prototipo.ListScreen',
             animationType: 'slide-horizontal',
-            navigatorStyle: {
-                navBarBackgroundColor: '#00ADA9',
-                screenBackgroundColor: '#ffffff'
-            },
-            backButtonHidden: false
+            navigatorStyle: navStyle,
+            backButtonHidden: false,
+            passProps: {
+                gastos: $this.state.gastos
+            }
         })
     }
 
