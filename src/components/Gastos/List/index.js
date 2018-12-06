@@ -104,7 +104,7 @@ export default class ListScreen extends Component {
                 <View>
                     <PopupMenu actions={['Edit', 'Remove']}
                         onPress={(eventName, index) => {
-                            if (eventName !== 'itemSelected') alert(eventName)
+                            if (eventName !== 'itemSelected') return;
                             else if (index == 0) { }
                             else if (index == 1) {
 
