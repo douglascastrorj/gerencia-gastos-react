@@ -11,6 +11,9 @@ import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity } from '
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { formatDate } from '../../../utils/misc';
 
+import { sortGastoDateDesc } from '../../../utils/misc';
+import PopupMenu from '../../common/tooltip';
+
 export default class ListScreen extends Component {
 
     state = {
@@ -42,9 +45,6 @@ export default class ListScreen extends Component {
         }
     }
 
-
-
-
     _keyExtractor = (item, index) => item.id;
 
     _onPressItem = (item) => {
@@ -53,17 +53,17 @@ export default class ListScreen extends Component {
     };
 
     _getItemIcon = item => (
-        <Icon name={ item.category? this.state.categories[item.category].icon : 'question'} size={30} color="#1194F6" />
+        <Icon name={item.category ? this.state.categories[item.category].icon : 'question'} size={30} color="#1194F6" />
     )
 
     _renderItem = ({ item }) => (
         <TouchableOpacity
-            onPress={() => {
+            onLongPress={() => {
                 this._onPressItem(item);
             }}>
             <View style={styles.listItem}>
                 {/* <Avatar size="xlarge" source={{ uri: repo.item.owner.avatar_url }} /> */}
-                <View>
+                <View style={styles.iconContent}>
                     {this._getItemIcon(item)}
                 </View>
 
@@ -80,7 +80,7 @@ export default class ListScreen extends Component {
                             style={styles.flexRow}>
                             <Text style={styles.textBold}>R$ </Text>
                             <Text style={styles.text}>
-                                {item.value}
+                                {parseFloat(item.value).toFixed(2)}
                             </Text>
                         </View>
                         <View
@@ -88,11 +88,23 @@ export default class ListScreen extends Component {
                             <Text style={styles.textBold}>Data </Text>
                             <Text style={styles.text}>{formatDate(item.date)}</Text>
                         </View>
+
                     </View>
+
+                </View>
+
+
+                <View>
+                    <PopupMenu actions={['Edit', 'Remove']} onPress={this.onPopupEvent} />
                 </View>
             </View>
         </TouchableOpacity>
     );
+
+    onPopupEvent = (eventName, index) => {
+        if (eventName !== 'itemSelected') return
+        else alert('oi')
+    }
 
 
     render() {
@@ -100,7 +112,7 @@ export default class ListScreen extends Component {
             <View style={styles.container}>
 
                 <FlatList
-                    data={this.props.gastos}
+                    data={sortGastoDateDesc(this.props.gastos)}
                     // data={[{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }]}
                     extraData={this.state}
                     keyExtractor={this._keyExtractor}
@@ -134,6 +146,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomColor: '#ccc',
         borderBottomWidth: 1,
+    },
+    iconContent: {
+        padding: 10
     },
     listContent: {
         marginLeft: 10,

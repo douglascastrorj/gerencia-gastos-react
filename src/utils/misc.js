@@ -41,10 +41,25 @@ export function extrairDadosELabels(gastos, funcaoDeAgrupamento) {
 
 export const Meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 
-export function agruparGastosPorMes(gastos) {
-
+export function sortGastoDateAsc(gastos) {
     gastos = gastos.filter(gasto => gasto.date ? true : false);
     gastos.sort((a, b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0));
+    return gastos;
+}
+
+
+export function sortGastoDateDesc(gastos) {
+    gastos = gastos.filter(gasto => gasto.date ? true : false);
+    gastos.sort((a, b) => (a.date > b.date) ? -1 : ((b.date > a.date) ? 1 : 0));
+    return gastos;
+}
+
+export function agruparGastosPorMes(gastos) {
+
+    // gastos = gastos.filter(gasto => gasto.date ? true : false);
+    // gastos.sort((a, b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0));
+
+    gastos = sortGastoDateAsc(gastos);
 
     const gastosAgrupadosPorMes = gastos.reduce((accumulator, gasto) => {
 
