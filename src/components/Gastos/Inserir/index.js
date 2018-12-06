@@ -13,6 +13,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { addGasto } from '../../../utils/firebase';
 import { getTokens } from '../../../utils/localStorage'
 
+import { showToast } from '../../../utils/misc';
+
 
 export default class InserirGastosComponent extends Component {
 
@@ -20,6 +22,7 @@ export default class InserirGastosComponent extends Component {
         description: '',
         category: '',
         value: '',
+        isFormValid: true,
 
         categorySelectedIconColor: '#3b5998',
         categoryIconColor: '#1194F6',
@@ -88,15 +91,32 @@ export default class InserirGastosComponent extends Component {
 
     }
 
+    isValid() {
+        let { description, category, value } = this.state;
+        if (description == '' || category == '' || value == '')
+            return false;
+        return true;
+    }
+
+    handleError() {
+        this.setState({ isFormValid: false });
+        showToast('Dados Invalidos, por favor verifique os dados preenchidos');
+    }
+
     submit = () => {
         let { description, category, value } = this.state;
+
+        if (!this.isValid()) {
+            this.handleError()
+            return;
+        } 
 
         getTokens(tokens => {
             const uid = tokens[3][1];
             addGasto({ uid, description, category, value })
                 .then(data => {
-                    console.log(data)
-                    alert('Dados Enviados')
+
+                    showToast('Dados Enviados com Sucesso')
                     this.setState({
                         description: '',
                         category: '',
@@ -120,7 +140,7 @@ export default class InserirGastosComponent extends Component {
                 <View style={styles.container}>
 
 
-                    <View style={{height: '20%', marginBottom: 20}}>
+                    <View style={{ height: '20%', marginBottom: 20 }}>
                         <Text style={styles.label}> Selecione uma categoria</Text>
                         <View style={styles.categoriesContainer}>
                             {this.renderCategories()}

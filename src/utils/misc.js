@@ -43,7 +43,7 @@ export const Meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'
 
 export function agruparGastosPorMes(gastos) {
 
-    gastos = gastos.filter( gasto => gasto.date ? true: false);
+    gastos = gastos.filter(gasto => gasto.date ? true : false);
     gastos.sort((a, b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0));
 
     const gastosAgrupadosPorMes = gastos.reduce((accumulator, gasto) => {
@@ -75,7 +75,7 @@ export const formatNumberToString = number => {
 
 export const formatDate = dateString => {
 
-    if(!dateString)
+    if (!dateString)
         return '-';
 
     const date = new Date(dateString);
@@ -83,4 +83,14 @@ export const formatDate = dateString => {
     const formatedDate = formatNumberToString(date.getDate()) + "/" + formatNumberToString(date.getMonth()) + "/" + formatNumberToString(date.getFullYear());
 
     return formatedDate;
+}
+
+
+import { ToastAndroid } from 'react-native';
+export const showToast = message => {
+    ToastAndroid.showWithGravity(
+        message,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+    );
 }
