@@ -7,12 +7,13 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { formatDate } from '../../../utils/misc';
 
 import { sortGastoDateDesc } from '../../../utils/misc';
 import PopupMenu from '../../common/tooltip';
+import { removeGasto } from '../../../utils/firebase';
 
 export default class ListScreen extends Component {
 
@@ -42,7 +43,12 @@ export default class ListScreen extends Component {
                 title: 'Educação',
                 icon: 'graduation-cap'
             }
-        }
+        },
+        selectedGasto: null
+    }
+
+    componentDidMount() {
+        this.setState({ gastos: sortGastoDateDesc(this.props.gastos) })
     }
 
     _keyExtractor = (item, index) => item.id;
@@ -57,10 +63,11 @@ export default class ListScreen extends Component {
     )
 
     _renderItem = ({ item }) => (
-        <TouchableOpacity
-            onLongPress={() => {
-                this._onPressItem(item);
-            }}>
+        <View
+            // onLongPress={() => {
+            //     this._onPressItem(item);
+            // }}
+            >
             <View style={styles.listItem}>
                 {/* <Avatar size="xlarge" source={{ uri: repo.item.owner.avatar_url }} /> */}
                 <View style={styles.iconContent}>
@@ -95,16 +102,37 @@ export default class ListScreen extends Component {
 
 
                 <View>
-                    <PopupMenu actions={['Edit', 'Remove']} onPress={this.onPopupEvent} />
+                    <PopupMenu actions={['Edit', 'Remove']}
+                        onPress={(eventName, index) => {
+                            if (eventName !== 'itemSelected') alert(eventName)
+                            else if (index == 0) { }
+                            else if (index == 1) {
+
+                                Alert.alert(
+                                    'Tem certeza que deseja remover este item',
+                                    'Após a remoção os dados desse item não poderão mais serem restaurados',
+                                    [
+                                        { text: 'Cancelar', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                                        {
+                                            text: 'OK', onPress: () => {
+                                                let { gastos } = this.state;
+                                                gastos = gastos.filter(gasto => gasto.id != item.id);
+
+                                                this.setState({gastos});
+                                                // alert('item removido' + item.id);
+
+                                                removeGasto(item.id);
+                                            }
+                                        },
+                                    ],
+                                    { cancelable: false }
+                                )
+                            }
+                        }} />
                 </View>
             </View>
-        </TouchableOpacity>
+        </View>
     );
-
-    onPopupEvent = (eventName, index) => {
-        if (eventName !== 'itemSelected') return
-        else alert('oi')
-    }
 
 
     render() {
@@ -112,7 +140,7 @@ export default class ListScreen extends Component {
             <View style={styles.container}>
 
                 <FlatList
-                    data={sortGastoDateDesc(this.props.gastos)}
+                    data={this.state.gastos}
                     // data={[{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }]}
                     extraData={this.state}
                     keyExtractor={this._keyExtractor}

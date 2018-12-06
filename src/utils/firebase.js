@@ -134,6 +134,31 @@ export function addGasto(gasto) {
 
 }
 
+
+export function removeGasto(gastoId) {
+
+    const request = axios({
+        method: "DELETE",
+        url: `${firebaseConfig.databaseURL}/gastos/${gastoId}.json`,
+        headers: {
+            "Content-Type": "aplication/json"
+        }
+    }).then(response => {
+        console.log(response)
+        return response.data
+    }).catch(e => {
+        console.log(e)
+        return false
+    })
+
+    // return {
+    //     type: AUTO_SIGN_IN,
+    //     payload: request
+    // }
+    return request;
+
+}
+
 export function getGastos(uid){
 
     let URL = `${firebaseConfig.databaseURL}/gastos.json`;

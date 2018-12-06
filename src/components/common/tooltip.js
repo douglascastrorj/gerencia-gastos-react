@@ -4,6 +4,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 
 const ICON_SIZE = 24
 
+/* <View>
+<PopupMenu actions={['Edit', 'Remove']} onPress={this.onPopupEvent} />
+</View> */
 export default class PopupMenu extends Component {
   
 
