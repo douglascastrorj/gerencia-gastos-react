@@ -13,38 +13,48 @@ import { formatDate } from '../../../utils/misc';
 
 import { sortGastoDateDesc } from '../../../utils/misc';
 import PopupMenu from '../../common/tooltip';
+import HorizontalScrollIcons from '../../common/horizontal_scroll_icons';
 import { removeGasto } from '../../../utils/firebase';
+
+import { orange } from '../../Graficos/colors'
 
 export default class ListScreen extends Component {
 
     state = {
-        categories: {
-            'Viagens': {
+        categories: [
+            {
+                title: 'All',
+                icon: 'circle-o-notch',
+            },
+            {
                 title: 'Viagens',
                 icon: 'plane',
             },
-            'Transporte': {
+            {
                 title: 'Transporte',
                 icon: 'bus'
             },
-            'Contas': {
+            {
                 title: 'Contas',
                 icon: 'money'
             },
-            'Compras': {
+            {
                 title: 'Compras',
                 icon: 'shopping-cart'
             },
-            'Lazer': {
+            {
                 title: 'Lazer',
                 icon: 'gamepad'
             },
-            'Educação': {
+            {
                 title: 'Educação',
                 icon: 'graduation-cap'
             }
-        },
-        selectedGasto: null
+        ],
+        categorySelected: {
+            title: 'All',
+            icon: 'circle-o-notch',
+        }
     }
 
     componentDidMount() {
@@ -58,16 +68,20 @@ export default class ListScreen extends Component {
         alert('item pressionado')
     };
 
-    _getItemIcon = item => (
-        <Icon name={item.category ? this.state.categories[item.category].icon : 'question'} size={30} color="#1194F6" />
-    )
+    _getItemIcon = item => {
+        let category = this.state.categories.filter(c => {
+            return c.title == item.category
+        })
+
+        return <Icon name={category.length > 0 ? category[0].icon : 'question'} size={30} color="#1194F6" />
+    }
 
     _renderItem = ({ item }) => (
         <View
-            // onLongPress={() => {
-            //     this._onPressItem(item);
-            // }}
-            >
+        // onLongPress={() => {
+        //     this._onPressItem(item);
+        // }}
+        >
             <View style={styles.listItem}>
                 {/* <Avatar size="xlarge" source={{ uri: repo.item.owner.avatar_url }} /> */}
                 <View style={styles.iconContent}>
@@ -118,7 +132,7 @@ export default class ListScreen extends Component {
                                                 let { gastos } = this.state;
                                                 gastos = gastos.filter(gasto => gasto.id != item.id);
 
-                                                this.setState({gastos});
+                                                this.setState({ gastos });
                                                 // alert('item removido' + item.id);
 
                                                 removeGasto(item.id);
@@ -134,18 +148,81 @@ export default class ListScreen extends Component {
         </View>
     );
 
+    filterCategory = (item) => {
+        this.setState({
+            categorySelected: item
+        })
+    }
 
-    render() {
-        return (
-            <View style={styles.container}>
+    applyFilter = (gastos) => {
+        if (this.state.categorySelected.title !== 'All') {
+            return gastos.filter(gasto => {
+                return gasto.category == this.state.categorySelected.title;
+            })
+        }
+        return gastos;
+    }
 
-                <FlatList
-                    data={this.state.gastos}
+    renderList = () => {
+
+
+        if (this.state.gastos) {
+            let data = this.applyFilter(this.state.gastos);
+
+            if (data.length > 0) {
+                return <FlatList
+                    data={data}
                     // data={[{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }]}
                     extraData={this.state}
                     keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem}
                 />
+            }
+        }
+
+        return (
+            <View style={{
+                flex: 1,
+                padding: 10,
+                justifyContent: 'center',
+            }}>
+                <View style={{  alignItems: 'center' }}>
+
+                    <Icon name="search-minus" size={50} color={orange} />
+                    <Text style={{
+                        fontFamily: 'Roboto-Regular',
+                        fontSize: 20,
+                        textAlign: 'center',
+                        marginTop: 5,
+                        color: orange
+
+                    }}>
+                        Não há itens registrados nessa essa categoria
+                    </Text>
+                </View>
+            </View>
+        )
+
+
+
+    }
+
+
+    render() {
+        return (
+            <View style={styles.container}>
+
+                <View style={{ height: 70 }}>
+                    <HorizontalScrollIcons
+                        categories={this.state.categories}
+                        categorySelected={this.state.categorySelected}
+                        updateCategoryHandler={this.filterCategory}
+                    />
+
+                </View>
+
+                {this.renderList()}
+
             </View>
 
         );
@@ -155,11 +232,19 @@ export default class ListScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // justifyContent: 'center',
-        // alignItems: 'center',
+        marginTop: 5,
         backgroundColor: '#fff',
-        // padding: 20
+        justifyContent: 'flex-start'
     },
+
+    listContainer: {
+        padding: 10,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
+
     cardContainerText: {
         flex: 1,
         padding: 10,
