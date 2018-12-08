@@ -8,7 +8,7 @@
 
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
 
 import { getGastos } from '../../utils/firebase';
 import { getTokens } from '../../utils/localStorage';
@@ -29,7 +29,7 @@ export default class HelloComponent extends Component {
         this.state = {
             gastos: [],
             pieChart: {},
-            loading: true
+            refreshing: true
         }
 
         this.props.navigator.setOnNavigatorEvent((event) => {
@@ -40,7 +40,11 @@ export default class HelloComponent extends Component {
 
 
     componentDidMount() {
+        this._onRefresh();
+    }
 
+    _onRefresh = () => {
+        this.setState({ refreshing: true })
         getTokens((tokens) => {
             getGastos(tokens[3][1])
                 .then(gastos => {
@@ -48,63 +52,70 @@ export default class HelloComponent extends Component {
 
                     let barChart = extrairDadosELabels(gastos, agruparGastosPorMes);
 
-                    this.setState({ gastos, pieChart, barChart, loading: false });
+                    this.setState({ gastos, pieChart, barChart, refreshing: false });
                 })
         })
     }
 
+    renderCharts() {
+
+        return this.state.refreshing ? null 
+        :
+        (
+            <View>
+
+                <View style={styles.content}>
+                    <Text style={styles.chartTitle}>
+                        Gasto Geral por categoria
+                        </Text>
+                    <PieChartComponent
+                        data={this.state.pieChart.values}
+                        labels={this.state.pieChart.labels}
+                    />
+                </View>
+
+
+
+                <View style={styles.content} >
+                    <Text style={styles.chartTitle}>
+                        Gasto dos Últimos Meses
+                        </Text>
+                    <BarChartComponent
+                        data={this.state.barChart.values}
+                        labels={this.state.barChart.labels}
+                    />
+                </View>
+
+                <View style={styles.content}>
+                    <Text style={styles.chartTitle}>
+                        Gasto Médio do Período
+                        </Text>
+                    {/* {this.renderLines()} */}
+                    <LineChartComponent />
+                </View>
+            </View>
+        )
+    }
 
 
     render() {
 
-        if (this.state.loading) {
-            return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator
-                        size={50}
+        return (
+
+            <ScrollView style={styles.container}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={this._onRefresh}
                     />
-                    <Text> Carregando...</Text>
-                </View>
-            )
-        }
-        else
-            return (
+                }
+            >
 
-                <ScrollView style={styles.container}>
+                {this.renderCharts()}
 
-                    <View style={styles.content}>
-                        <Text style={styles.chartTitle}>
-                            Gasto Geral por categoria
-                        </Text>
-                        <PieChartComponent
-                            data={this.state.pieChart.values}
-                            labels={this.state.pieChart.labels}
-                        />
-                    </View>
+            </ ScrollView>
 
-
-
-                    <View style={styles.content} >
-                        <Text style={styles.chartTitle}>
-                            Gasto dos Últimos Meses
-                        </Text>
-                        <BarChartComponent
-                            data={this.state.barChart.values}
-                            labels={this.state.barChart.labels}
-                        />
-                    </View>
-
-                    <View style={styles.content}>
-                        <Text style={styles.chartTitle}>
-                            Gasto Médio do Período
-                        </Text>
-                        {/* {this.renderLines()} */}
-                        <LineChartComponent />
-                    </View>
-
-                </ScrollView>
-
-            )
+        )
     }
 }
 
