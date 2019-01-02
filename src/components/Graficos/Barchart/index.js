@@ -9,8 +9,8 @@ import { purple } from '../colors';
 const BarChartComponent = (props) => {
 
     const fill = purple;
-    const data = [50, 10, 40, 95, 123, 40]
-    const labels = ['Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+    // const data = [50, 10, 40, 95, 123, 40]
+    // const labels = ['Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
 
     return (
 

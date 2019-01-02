@@ -10,6 +10,7 @@
     "axios": "^0.18.0",
     "react": "16.6.1",
     "react-native": "0.57.6",
+    "react-native-action-button": "^2.8.5",
     "react-native-google-sign-in": "^1.0.16",
     "react-native-navigation": "1.x.x",
     "react-native-svg": "^8.0.8",
