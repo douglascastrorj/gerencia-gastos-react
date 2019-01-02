@@ -90,7 +90,7 @@ export default class HelloComponent extends Component {
             console.log(this.state.barChart)
             // return null;
             return (
-                <View>
+                <View style={{paddingBottom: 100}}>
 
                     {
                         this.state.pieChart.values && this.state.pieChart.values.length > 0
