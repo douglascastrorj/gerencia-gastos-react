@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, Button, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, Button, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import logoImage from '../../assets/img1.jpg';
 
@@ -20,14 +20,10 @@ export default class LoginComponent extends Component {
     state = {
         email: '',
         password: '',
-        loading: true
+        confirmPassword: '',
+        loading: true,
+        typeLogin: true
     }
-
-    register = (email, password) => {
-        const result = signUp({ email, password });
-        console.log(result)
-    }
-
 
     componentDidMount() {
         getTokens((values) => {
@@ -48,6 +44,35 @@ export default class LoginComponent extends Component {
                 })
             }
         })
+    }
+
+    toggleRegisterForm = () => {
+        const newFormType = !this.state.typeLogin;
+        this.setState({ typeLogin: newFormType })
+    }
+
+    registrar() {
+        let { email, password, confirmPassword } = this.state;
+
+        if (password == confirmPassword) {
+            
+            signUp({ email, password })
+            .then(response => {
+                console.log(response)
+                alert('Usuário Registrado')
+                this.setState({ typeLogin: true })
+    
+            })
+            .catch( err => {
+                console.log(err)
+                alert('Erro ao registrar usuário')
+            })
+
+
+        } else {
+            alert('Senha digitada incorretamente')
+        }
+
     }
 
     login() {
@@ -125,12 +150,41 @@ export default class LoginComponent extends Component {
 
                             <TextInput
                                 style={styles.input}
-                                placeholder="Password"
+                                placeholder="Senha"
                                 secureTextEntry
                                 onChangeText={(password) => this.setState({ password })}
                             />
 
-                            <Button title="Login" onPress={() => { this.login(this.state.email, this.state.password) }} />
+                            {
+                                this.state.typeLogin ?
+                                    null
+                                    :
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Confirme a senha"
+                                        secureTextEntry
+                                        onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
+                                    />
+                            }
+
+
+                            {
+                                this.state.typeLogin ?
+                                    <View>
+                                        <Button title="Login" onPress={() => { this.login() }} />
+                                        <TouchableOpacity style={{ padding: 10, justifyContent: 'center', alignItems: 'center' }}
+                                            onPress={() => this.toggleRegisterForm()}
+                                        >
+                                            <Text style={styles.registerBtn}>
+                                                Registre-se
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    :
+                                    <Button title="Registrar" onPress={() => { this.registrar() }} />
+                            }
+
+
 
                         </View>
                     </View>
@@ -155,9 +209,9 @@ const styles = StyleSheet.create({
         // padding: 10
     },
 
-    loadingIcon: { 
-        alignItems: 'center', 
-        marginBottom: 20 
+    loadingIcon: {
+        alignItems: 'center',
+        marginBottom: 20
     },
 
     logo: {
@@ -194,6 +248,10 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         // width: 300,
         marginBottom: 20
+    },
+    registerBtn: {
+        fontFamily: 'RobotoCondensed',
+        fontSize: 16
     }
 
 });

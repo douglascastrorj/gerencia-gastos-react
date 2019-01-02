@@ -62,8 +62,9 @@ export function signUp(data) {
         }
     }).then(response => {
         return response.data
-    }).catch(e => {
-        return e;
+    }).catch(error => {
+        console.log('erro ao registrar')
+        return Promise.reject(error);
     })
 
     // return {
