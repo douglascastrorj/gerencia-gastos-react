@@ -61,21 +61,25 @@ export function agruparGastosPorMes(gastos) {
 
     gastos = sortGastoDateAsc(gastos);
 
-    const gastosAgrupadosPorMes = gastos.reduce((accumulator, gasto) => {
+    // gastosAgrupadosPorMes {
+    //     2018: { janeiro: 123, fevereiro: 123, ... DEZEMBRO}.
+    //     2019: { janeiro: 123, fevereiro: 123}.
+    // }
 
+    const gastosAgrupadosPorMes = gastos.reduce((accumulator, gasto) => {
         const gastoDate = new Date(gasto.date);
-        if (gastoDate.getFullYear() == new Date().getFullYear()) {
+        console.log(gasto)
+        if(gastoDate){
             let mesIndex = gastoDate.getMonth()
             let mesLabel = Meses[mesIndex];
 
-            if (accumulator[mesLabel]) {
-                accumulator[mesLabel] += customParseFloat(gasto.value);
-            }
-            else if (customParseFloat(gasto.value) > 0) {
-                accumulator[mesLabel] = customParseFloat(gasto.value);
+            const key = `${mesLabel}/${gastoDate.getFullYear()}`;
+            if( accumulator[key] ){
+                accumulator[key] += customParseFloat(gasto.value);
+            } else {
+                accumulator[key] =  customParseFloat(gasto.value);
             }
         }
-
         return accumulator;
     }, {})
 
